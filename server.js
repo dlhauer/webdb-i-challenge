@@ -60,4 +60,41 @@ server.post('/', (req, res) => {
     });
 });
 
+server.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  db('accounts')
+    .where({ id })
+    .update(changes)
+    .then(count => {
+      res.status(200).json({
+        message: `${count} record(s) updated.`
+      })
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        error: 'Error updating account.'
+      });
+    });
+});
+
+server.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  db('accounts')
+    .where({ id })
+    .del()
+    .then(count => {
+      res.status(200).json({
+        message: `${count} records deleted.`
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        error: 'Error deleting the account.'
+      });
+    });
+});
+
 module.exports = server;
